@@ -1,0 +1,73 @@
+group = "com.ekuaibao.exile"
+
+version = "0.1"
+
+ext.vers = [
+        exile  : "0.6.+",
+        graphql: "11.0"
+]
+
+
+buildscript {
+    apply from: rootProject.file("buildscript/maven.gradle"), to: buildscript
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.11"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:1.3.11"
+        classpath "com.github.ben-manes:gradle-versions-plugin:0.20.0"
+    }
+}
+
+apply from: rootProject.file("buildscript/maven.gradle")
+
+apply plugin: "idea"
+apply plugin: "kotlin"
+apply plugin: "kotlin-allopen"
+apply plugin: "application"
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
+}
+
+idea {
+    project {
+        jdkName = "1.8"
+        languageLevel = "1.8"
+    }
+    module {
+        downloadSources = true
+    }
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+allOpen {
+    annotation("com.ekuaibao.exile.boot.Autowire")
+    annotation("com.ekuaibao.exile.web.WebEndpoint")
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+[compileKotlin, compileTestKotlin].forEach {
+    it.kotlinOptions {
+        verbose = true
+        jvmTarget = "1.8"
+        javaParameters = true
+        noStdlib = true
+        noReflect = true
+        freeCompilerArgs = ["-Xjvm-default=enable"]
+    }
+}
+
+dependencies {
+    compile "com.ekuaibao.exile:exile-vertx-web:$vers.exile"
+    compile "com.graphql-java:graphql-java:$vers.graphql"
+}
+
+application {
+    mainClassName = "com.ekuaibao.exile.boot.LauncherKt"
+}

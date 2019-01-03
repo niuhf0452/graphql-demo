@@ -1,0 +1,23 @@
+.App {
+    padding-top: 32px;
+    width: 480px;
+    margin: auto;
+    font-size: 18px;
+}
+
+.input {
+    width: 100%;
+    height: 2em;
+}
+
+.complete {
+    text-decoration-line: line-through;
+}
+
+ul {
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}

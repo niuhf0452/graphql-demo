@@ -1,0 +1,25 @@
+def user = System.properties["repoUser"]
+def pwd = System.properties["repoPassword"]
+
+if (user == null || pwd == null) {
+    println("Missing username and password of maven repository. Set in ~/.gradle/gradle.properties .\nMore information at http://wiki.ekuaibao.com/pages/viewpage.action?pageId=6230137 .")
+    repositories {
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+} else {
+    repositories {
+        mavenLocal()
+        maven {
+            credentials {
+                username = user
+                password = pwd
+            }
+            url "https://repo.ekuaibao.com/repository/java-group/"
+        }
+    }
+}
